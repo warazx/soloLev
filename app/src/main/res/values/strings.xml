@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SoloLev</string>
+    <string name="activity_login_username_hint_text">Användarnamn</string>
+    <string name="activity_login_password_hint_text">Lösenord</string>
+    <string name="activity_login_login_btn_text">Logga in</string>
+    <string name="toast_login_error_message">Ogilltigt användarnamn eller lösenord.</string>
 </resources>

@@ -8,10 +8,33 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.kringlan.sololev.LoginActivity">
+    tools:context="com.example.kringlan.sololev.ui.LoginActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:hint="@string/activity_login_username_hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:id="@+id/activity_login_username_edittext" />
+
+        <EditText
+            android:hint="@string/activity_login_password_hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:id="@+id/activity_login_password_edittext" />
+
+        <Button
+            android:text="@string/activity_login_login_btn_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_login_login_btn"
+            android:onClick="logIntoApp"/>
+    </LinearLayout>
+
 </RelativeLayout>
