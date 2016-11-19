@@ -27,13 +27,13 @@ public class LoginActivity extends AppCompatActivity {
 
     public void logIntoApp(View view) {
         DBHelper db = new DBHelper(this);
-        User user = db.findUser(usernameEditText.getText().toString());
+        String username = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        User user = db.findUser(username);
 
-        if(usernameEditText.getText().toString().equals(user.getUsername())) {
-            if(passwordEditText.getText().toString().equals(user.getPassword())) {
-                Intent intent = new Intent(this, OrderListActivity.class);
-                startActivity(intent);
-            }
+        if(user.getUsername() != null && password.equals(user.getPassword())) {
+            Intent intent = new Intent(this, OrderListActivity.class);
+            startActivity(intent);
         } else {
             Toast.makeText(this, R.string.toast_login_error_message, Toast.LENGTH_SHORT).show();
         }
