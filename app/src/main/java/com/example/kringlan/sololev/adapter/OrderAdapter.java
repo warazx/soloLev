@@ -54,7 +54,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
         public void bindOrder(Order order) {
-            orderIdText.setText(order.getOrderID());
+            orderIdText.setText(order.getOrderID() + "");
             addressText.setText(order.getCustomer().getAddress());
         }
 
