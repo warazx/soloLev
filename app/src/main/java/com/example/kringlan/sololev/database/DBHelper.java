@@ -6,10 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.kringlan.sololev.model.User;
-import com.example.kringlan.sololev.view.LoginActivity;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DB_HELPER";
@@ -21,18 +19,48 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final int USER_USERNAME_COL = 1;
     private static final int USER_PASSWORD_COL = 2;
 
+    private static final String CREATE_USERS_TABLE = "CREATE TABLE " + USER_TABLE +
+            " (_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            USER_USERNAME + " VARCHAR(25) NOT NULL," +
+            USER_PASSWORD + " VARCHAR(25) NOT NULL" +
+            ");";
+
+    private static final String ORDER_TABLE = "orders";
+    private static final String ORDER_ID = "_id";
+    private static final String ORDER_DATE = "order_date";
+    private static final String ORDER_CUSTOMER = "costumer";
+    private static final String ORDER_ISDELIVERED = "is_delivered";
+    private static final String ORDER_DELIVEREDDATE = "delivered_date";
+    private static final String ORDER_DELIVEREDLONG = "delivered_long";
+    private static final String ORDER_DELIVEREDLAT = "delivered_lat";
+
+    private static final int ORDER_ID_COL = 0;
+    private static final int ORDER_DATE_COL = 1;
+    private static final int ORDER_CUSTOMER_COL = 2;
+    private static final int ORDER_ISDELIVERED_COL = 3;
+    private static final int ORDER_DELIVEREDDATE_COL = 4;
+    private static final int ORDER_DELIVEREDLONG_COL = 5;
+    private static final int ORDER_DELIVEREDLAT_COL = 6;
+
+    private static final String CREATE_ORDERS_TABLE = "CREATE TABLE " + ORDER_TABLE + " (" +
+            ORDER_ID + " INTEGER PRIMARY KEY," +
+            ORDER_DATE + " REAL NOT NULL," +
+            ORDER_CUSTOMER + " INTEGER NOT NULL," +
+            ORDER_ISDELIVERED + " NUMERIC NOT NULL," +
+            ORDER_DELIVEREDDATE + " REAL NOT NULL," +
+            ORDER_DELIVEREDLONG + " REAL NOT NULL," +
+            ORDER_DELIVEREDLAT + " REAL NOT NULL," +
+            ");";
+
+
     public DBHelper(Context context) {
         super(context, "LevAppDB", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE " +
-                USER_TABLE + " (_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                USER_USERNAME + " VARCHAR(25) NOT NULL," +
-                USER_PASSWORD + " VARCHAR(25) NOT NULL" +
-                ");";
-        db.execSQL(sql);
+        db.execSQL(CREATE_USERS_TABLE);
+        db.execSQL(CREATE_ORDERS_TABLE);
     }
 
     @Override
@@ -56,7 +84,6 @@ public class DBHelper extends SQLiteOpenHelper {
         } else return false;
     }
 
-    //Finds if the db contains any user with the provided username.
     public User findUser(String name) {
         SQLiteDatabase db = getReadableDatabase();
 
@@ -79,5 +106,4 @@ public class DBHelper extends SQLiteOpenHelper {
         c.close();
         return user;
     }
-
 }
