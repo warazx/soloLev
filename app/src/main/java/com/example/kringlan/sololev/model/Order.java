@@ -1,5 +1,7 @@
 package com.example.kringlan.sololev.model;
 
+import com.example.kringlan.sololev.util.TimeConverter;
+
 public class Order {
     private static int idCounter = 1;
 
@@ -27,8 +29,8 @@ public class Order {
         this.orderID = orderID;
     }
 
-    public long getOrderingDate() {
-        return orderingDate;
+    public String getOrderingDate() {
+        return TimeConverter.toString(orderingDate);
     }
 
     public void setOrderingDate(long orderingDate) {
