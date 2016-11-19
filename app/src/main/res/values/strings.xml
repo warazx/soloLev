@@ -6,4 +6,8 @@
     <string name="toast_login_error_message">Ogilltigt användarnamn eller lösenord.</string>
     <string name="activity_login_add_user_btn_text">Lägg till användare</string>
     <string name="toast_add_user_error_message">Användarnamnet används redan.</string>
+    <string name="order_item_order_id_label">Order:</string>
+    <string name="order_item_costumer_address_label">Till:</string>
+    <string name="order_item_costumer_name_label">Namn:</string>
+    <string name="order_item_costumer_phone_label">Telefon:</string>
 </resources>
