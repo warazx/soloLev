@@ -4,4 +4,6 @@
     <string name="activity_login_password_hint_text">Lösenord</string>
     <string name="activity_login_login_btn_text">Logga in</string>
     <string name="toast_login_error_message">Ogilltigt användarnamn eller lösenord.</string>
+    <string name="activity_login_add_user_btn_text">Lägg till användare</string>
+    <string name="toast_add_user_error_message">Användarnamnet används redan.</string>
 </resources>
