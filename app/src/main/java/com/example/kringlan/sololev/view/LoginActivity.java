@@ -28,6 +28,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void logIntoApp(View view) {
+        DBHelper db = new DBHelper(this);
+        User user = db.findUser(usernameEditText.getText().toString());
+
         if(usernameEditText.getText().toString().equals(user.getUsername())) {
             if(passwordEditText.getText().toString().equals(user.getPassword())) {
                 Intent intent = new Intent(this, OrderListActivity.class);

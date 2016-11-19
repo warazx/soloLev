@@ -56,7 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Finds if the db contains any user with the provided username.
-    private User findUser(String name) {
+    public User findUser(String name) {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] projection = {USER_USERNAME, USER_PASSWORD};
