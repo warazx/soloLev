@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.kringlan.sololev.R;
-import com.example.kringlan.sololev.adapter.OrderListAdapter;
+import com.example.kringlan.sololev.adapter.OrderAdapter;
 
 public class OrderListActivity extends AppCompatActivity {
 
@@ -26,7 +26,7 @@ public class OrderListActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new OrderListAdapter();
+        adapter = new OrderAdapter();
         recyclerView.setAdapter(adapter);
 
     }
