@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.kringlan.sololev.model.User;
+import com.example.kringlan.sololev.view.LoginActivity;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DB_HELPER";
@@ -59,19 +60,23 @@ public class DBHelper extends SQLiteOpenHelper {
     public User findUser(String name) {
         SQLiteDatabase db = getReadableDatabase();
 
-        String[] projection = {USER_USERNAME, USER_PASSWORD};
-        String selection = USER_USERNAME + " = ?";
+        String selection = USER_USERNAME + " =?";
         String[] selectionArgs = {name};
 
-        Cursor c = db.query(USER_TABLE, projection, selection, selectionArgs, null, null, null);
+        Cursor c = db.query(USER_TABLE, null, selection, selectionArgs, null, null, null, null);
 
-        User user = null;
+        User user;
+
+        c.moveToFirst();
 
         if(c.getCount() > 0) {
             user = new User(c.getString(USER_USERNAME_COL), c.getString(USER_PASSWORD_COL));
+        } else {
+            user = null;
         }
 
         db.close();
+        c.close();
         return user;
     }
 

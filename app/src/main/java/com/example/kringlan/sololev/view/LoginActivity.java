@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString();
 
         if(db.addUser(username, password)) {
-            logIntoApp(view);
+            Toast.makeText(this, R.string.toast_add_user_success_message, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, R.string.toast_add_user_error_message, Toast.LENGTH_SHORT).show();
         }
