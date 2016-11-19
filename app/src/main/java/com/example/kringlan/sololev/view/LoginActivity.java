@@ -16,7 +16,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
-    private Button loginButton;
     private User user;
 
     @Override
@@ -24,11 +23,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        user = new User("te", "st");
-
         usernameEditText = (EditText) findViewById(R.id.activity_login_username_edittext);
         passwordEditText = (EditText) findViewById(R.id.activity_login_password_edittext);
-        loginButton = (Button) findViewById(R.id.activity_login_login_btn);
     }
 
     public void logIntoApp(View view) {
@@ -43,15 +39,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void addUserToDatabase(View view) {
-        if(!usernameEditText.getText().toString().equals(user.getUsername())) {
-            writeNewUserToDB(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+        DBHelper db = new DBHelper(this);
+
+        String username = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
+        if(db.addUser(username, password)) {
+            logIntoApp(view);
         } else {
             Toast.makeText(this, R.string.toast_add_user_error_message, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void writeNewUserToDB(String username, String password) {
-        DBHelper dbHelper = new DBHelper(this);
-        dbHelper.addUser(username, password);
     }
 }
