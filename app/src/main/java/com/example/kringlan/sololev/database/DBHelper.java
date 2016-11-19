@@ -40,7 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public boolean addUser(String username, String password) {
-        if(findUser(username) != null) {
+        if(findUser(username) == null) {
             SQLiteDatabase db = getWritableDatabase();
 
             ContentValues cvs = new ContentValues();
@@ -67,7 +67,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         User user = null;
 
-        if(c.moveToFirst()) {
+        if(c.getCount() > 0) {
             user = new User(c.getString(USER_USERNAME_COL), c.getString(USER_PASSWORD_COL));
         }
 

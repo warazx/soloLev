@@ -31,9 +31,11 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString();
         User user = db.findUser(username);
 
-        if(user.getUsername() != null && password.equals(user.getPassword())) {
-            Intent intent = new Intent(this, OrderListActivity.class);
-            startActivity(intent);
+        if(user != null) {
+            if(password.equals(user.getPassword())) {
+                Intent intent = new Intent(this, OrderListActivity.class);
+                startActivity(intent);
+            }
         } else {
             Toast.makeText(this, R.string.toast_login_error_message, Toast.LENGTH_SHORT).show();
         }
