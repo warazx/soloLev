@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.example.kringlan.sololev.R;
 import com.example.kringlan.sololev.database.DBHelper;
 import com.example.kringlan.sololev.model.User;
+import com.example.kringlan.sololev.util.SharedPrefsHelper;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -52,5 +53,17 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.toast_add_user_error_message, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPrefsHelper.saveSharedPrefs(this);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        SharedPrefsHelper.loadSharedPrefs(this);
     }
 }

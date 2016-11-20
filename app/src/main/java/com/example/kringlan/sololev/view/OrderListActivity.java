@@ -14,6 +14,7 @@ import com.example.kringlan.sololev.adapter.OrderAdapter;
 import com.example.kringlan.sololev.database.DBHelper;
 import com.example.kringlan.sololev.model.Customer;
 import com.example.kringlan.sololev.model.Order;
+import com.example.kringlan.sololev.util.SharedPrefsHelper;
 
 public class OrderListActivity extends AppCompatActivity {
 
@@ -21,7 +22,7 @@ public class OrderListActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private Order[] orders = new Order[0];
+    private Order[] orders = new Order[1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,8 @@ public class OrderListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_list);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        orders[0] = new Order(new Customer("Sven", "070-33558899", "Svinstigen 33"));
 
         recyclerView.setHasFixedSize(true);
 
@@ -43,5 +46,17 @@ public class OrderListActivity extends AppCompatActivity {
     public void addNewOrder(View view) {
         DBHelper db = new DBHelper(this);
         db.addOrder(new Order(new Customer("Sven", "070-33558899", "Svinstigen 33")));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPrefsHelper.saveSharedPrefs(this);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        SharedPrefsHelper.loadSharedPrefs(this);
     }
 }

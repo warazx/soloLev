@@ -12,4 +12,5 @@
     <string name="order_item_costumer_phone_label">Telefon:</string>
     <string name="toast_add_user_success_message">Användare tillagd!</string>
     <string name="order_counter_status">ORDER_COUNTER_STATUS</string>
+    <string name="customer_counter_status">CUSTOMER_COUNTER_STATUS</string>
 </resources>

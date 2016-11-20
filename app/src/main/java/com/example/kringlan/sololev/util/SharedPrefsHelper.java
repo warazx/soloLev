@@ -5,21 +5,24 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.kringlan.sololev.R;
+import com.example.kringlan.sololev.model.Customer;
 import com.example.kringlan.sololev.model.Order;
 
 public final class SharedPrefsHelper {
 
-    public void saveSharedPrefs(Activity activity) {
+    public static void saveSharedPrefs(Activity activity) {
         SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(String.valueOf(R.string.order_counter_status), Order.getIdCounter());
-        editor.commit();
+        editor.putInt(activity.getString(R.string.order_counter_status), Order.getIdCounter());
+        editor.putInt(activity.getString(R.string.customer_counter_status), Customer.getIdCounter());
+        editor.apply();
     }
 
-    public void loadSharedPrefs(Activity activity) {
+    public static void loadSharedPrefs(Activity activity) {
         SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        int value = sharedPref.getInt(String.valueOf(R.string.order_counter_status), 1);
-        Order.setIdCounter(value);
+        int orderCounter = sharedPref.getInt(activity.getString(R.string.order_counter_status), Order.getIdCounter());
+        int customerCounter = sharedPref.getInt(activity.getString(R.string.customer_counter_status), Customer.getIdCounter());
+        Order.setIdCounter(orderCounter);
+        Customer.setIdCounter(customerCounter);
     }
 }

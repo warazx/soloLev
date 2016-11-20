@@ -18,6 +18,14 @@ public class Customer {
         idCounter++;
     }
 
+    public static int getIdCounter() {
+        return idCounter;
+    }
+
+    public static void setIdCounter(int idCounter) {
+        Customer.idCounter = idCounter;
+    }
+
     public int getId() {
         return id;
     }
