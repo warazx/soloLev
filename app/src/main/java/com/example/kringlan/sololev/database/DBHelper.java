@@ -7,12 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.kringlan.sololev.model.Customer;
+import com.example.kringlan.sololev.model.Order;
 import com.example.kringlan.sololev.model.User;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DB_HELPER";
 
+    // -----------------------------------------------------------------------------------------
+
     private static final String USER_TABLE = "users";
+
     private static final String USER_USERNAME = "username";
     private static final String USER_PASSWORD = "password";
 
@@ -25,7 +30,34 @@ public class DBHelper extends SQLiteOpenHelper {
             USER_PASSWORD + " VARCHAR(25) NOT NULL" +
             ");";
 
+    // -----------------------------------------------------------------------------------------
+
+    private static final String CUSTOMER_TABLE = "customers";
+
+    private static final String CUSTOMER_ID = "_id";
+    private static final String CUSTOMER_NAME = "name";
+    private static final String CUSTOMER_PHONE = "phone";
+    private static final String CUSTOMER_ADDRESS = "address";
+    private static final String CUSTOMER_CREATED = "created";
+
+    private static final int CUSTOMER_ID_COL = 0;
+    private static final int CUSTOMER_NAME_COL = 1;
+    private static final int CUSTOMER_PHONE_COL = 2;
+    private static final int CUSTOMER_ADDRESS_COL = 3;
+    private static final int CUSTOMER_CREATED_COL = 4;
+
+    private static final String CREATE_CUSTOMER_TABLE = "CREATE TABLE " + CUSTOMER_TABLE + " (" +
+            CUSTOMER_ID + " INTEGER PRIMARY KEY," +
+            CUSTOMER_NAME + " VARCHAR(25) NOT NULL," +
+            CUSTOMER_PHONE + " VARCHAR(15) NOT NULL," +
+            CUSTOMER_ADDRESS + " VARCHAR(50) NOT NULL," +
+            CUSTOMER_CREATED + " REAL NOT NULL" +
+            ");";
+
+    // -----------------------------------------------------------------------------------------
+
     private static final String ORDER_TABLE = "orders";
+
     private static final String ORDER_ID = "_id";
     private static final String ORDER_DATE = "order_date";
     private static final String ORDER_CUSTOMER = "costumer";
@@ -52,6 +84,7 @@ public class DBHelper extends SQLiteOpenHelper {
             ORDER_DELIVEREDLAT + " REAL NOT NULL," +
             ");";
 
+    // -----------------------------------------------------------------------------------------
 
     public DBHelper(Context context) {
         super(context, "LevAppDB", null, 1);
@@ -60,6 +93,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USERS_TABLE);
+        db.execSQL(CREATE_CUSTOMER_TABLE);
         db.execSQL(CREATE_ORDERS_TABLE);
     }
 
@@ -84,13 +118,47 @@ public class DBHelper extends SQLiteOpenHelper {
         } else return false;
     }
 
+    public void addCustomer(Customer customer) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cvs = new ContentValues();
+        cvs.put(CUSTOMER_ID, customer.getId());
+        cvs.put(CUSTOMER_NAME, customer.getName());
+        cvs.put(CUSTOMER_PHONE, customer.getPhoneNumber());
+        cvs.put(CUSTOMER_ADDRESS, customer.getAddress());
+        cvs.put(CUSTOMER_CREATED, customer.getCreatedDate());
+
+        long id = db.insert(CUSTOMER_TABLE, null, cvs);
+        Log.d(TAG, "Inserted new customer: " + id);
+
+        db.close();
+    }
+
+    public void addOrder(Order order) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cvs = new ContentValues();
+        cvs.put(ORDER_ID, order.getOrderID());
+        cvs.put(ORDER_DATE, order.getDeliveredDate());
+        cvs.put(ORDER_CUSTOMER, order.getCustomer().getId());
+        cvs.put(ORDER_ISDELIVERED, order.isDelivered());
+        cvs.put(ORDER_DELIVEREDDATE, order.getDeliveredDate());
+        cvs.put(ORDER_DELIVEREDLONG, order.getDeliveredLong());
+        cvs.put(ORDER_DELIVEREDLAT, order.getDeliveredLat());
+
+        long id = db.insert(ORDER_TABLE, null, cvs);
+        Log.d(TAG, "Inserted new order: " + id);
+
+        db.close();
+    }
+
     public User findUser(String name) {
         SQLiteDatabase db = getReadableDatabase();
 
         String selection = USER_USERNAME + " =?";
         String[] selectionArgs = {name};
 
-        Cursor c = db.query(USER_TABLE, null, selection, selectionArgs, null, null, null, null);
+        Cursor c = db.query(USER_TABLE, null, selection, selectionArgs, null, null, null);
 
         User user;
 
@@ -106,4 +174,24 @@ public class DBHelper extends SQLiteOpenHelper {
         c.close();
         return user;
     }
+
+    /*public Order[] getUndeliveredOrders() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selection = ORDER_ISDELIVERED + " =?";
+        String[] selectionArgs = {"0"};
+
+        Cursor c = db.query(ORDER_TABLE, null, selection, selectionArgs, null, null, null);
+
+        Order[] orders = new Order[c.getCount()];
+
+        if(c.moveToFirst()) {
+            do {
+                orders[c.getPosition()] = new Order(c.getInt(ORDER_CUSTOMER_COL));
+            }
+        }
+
+
+        return orders;
+    }*/
 }
