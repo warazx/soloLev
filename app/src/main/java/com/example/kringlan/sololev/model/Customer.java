@@ -18,6 +18,14 @@ public class Customer {
         idCounter++;
     }
 
+    public Customer(int id, String name, String phoneNumber, String address, long createdDate) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.createdDate = createdDate;
+    }
+
     public static int getIdCounter() {
         return idCounter;
     }

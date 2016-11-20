@@ -21,6 +21,16 @@ public class Order {
         idCounter++;
     }
 
+    public Order(int orderID, long orderingDate, Customer customer, boolean isDelivered, long deliveredDate, long deliveredLong, long deliveredLat) {
+        this.orderID = orderID;
+        this.orderingDate = orderingDate;
+        this.customer = customer;
+        this.isDelivered = isDelivered;
+        this.deliveredDate = deliveredDate;
+        this.deliveredLong = deliveredLong;
+        this.deliveredLat = deliveredLat;
+    }
+
     public static int getIdCounter() {
         return idCounter;
     }

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kringlan.sololev.R;
+import com.example.kringlan.sololev.model.Customer;
 import com.example.kringlan.sololev.model.Order;
 import com.example.kringlan.sololev.view.OrderActivity;
 
@@ -42,6 +43,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView orderIdText;
         public TextView addressText;
+        public TextView nameText;
+        public TextView phoneText;
 
         public OrderViewHolder(View itemView) {
             super(itemView);
@@ -49,13 +52,21 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             context = itemView.getContext();
             orderIdText = (TextView) itemView.findViewById(R.id.order_item_order_id_value);
             addressText = (TextView) itemView.findViewById(R.id.order_item_costumer_address_value);
+            nameText = (TextView) itemView.findViewById(R.id.order_item_costumer_name_value);
+            phoneText = (TextView) itemView.findViewById(R.id.order_item_costumer_phone_value);
 
             itemView.setOnClickListener(this);
         }
 
         public void bindOrder(Order order) {
+            Customer customer = order.getCustomer();
+
             orderIdText.setText(order.getOrderID() + "");
-            addressText.setText(order.getCustomer().getAddress());
+            if(customer != null) {
+                addressText.setText(customer.getAddress());
+                nameText.setText(customer.getName());
+                phoneText.setText(customer.getPhoneNumber());
+            }
         }
 
         @Override

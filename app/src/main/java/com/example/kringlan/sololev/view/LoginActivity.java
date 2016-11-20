@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.example.kringlan.sololev.R;
 import com.example.kringlan.sololev.database.DBHelper;
 import com.example.kringlan.sololev.model.User;
+import com.example.kringlan.sololev.util.GenerateCustomer;
 import com.example.kringlan.sololev.util.SharedPrefsHelper;
 
 public class LoginActivity extends AppCompatActivity {

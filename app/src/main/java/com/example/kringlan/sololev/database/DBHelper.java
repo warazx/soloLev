@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.kringlan.sololev.model.Customer;
 import com.example.kringlan.sololev.model.Order;
@@ -79,9 +80,9 @@ public class DBHelper extends SQLiteOpenHelper {
             ORDER_DATE + " REAL NOT NULL," +
             ORDER_CUSTOMER + " INTEGER NOT NULL," +
             ORDER_ISDELIVERED + " NUMERIC NOT NULL," +
-            ORDER_DELIVEREDDATE + " REAL NOT NULL," +
-            ORDER_DELIVEREDLONG + " REAL NOT NULL," +
-            ORDER_DELIVEREDLAT + " REAL NOT NULL" +
+            ORDER_DELIVEREDDATE + " REAL," +
+            ORDER_DELIVEREDLONG + " REAL," +
+            ORDER_DELIVEREDLAT + " REAL" +
             ");";
 
     // -----------------------------------------------------------------------------------------
@@ -103,93 +104,134 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean addUser(String username, String password) {
         if(findUser(username) == null) {
-            SQLiteDatabase db = getWritableDatabase();
-
             ContentValues cvs = new ContentValues();
+
             cvs.put(USER_USERNAME, username);
             cvs.put(USER_PASSWORD, password);
 
-            long id = db.insert(USER_TABLE, null, cvs);
-            Log.d(TAG, "Inserted new user: " + id);
+            writeToDB(USER_TABLE, cvs);
 
-            db.close();
             return true;
         } else return false;
     }
 
     public void addCustomer(Customer customer) {
-        SQLiteDatabase db = getWritableDatabase();
-
         ContentValues cvs = new ContentValues();
+
         cvs.put(CUSTOMER_ID, customer.getId());
         cvs.put(CUSTOMER_NAME, customer.getName());
         cvs.put(CUSTOMER_PHONE, customer.getPhoneNumber());
         cvs.put(CUSTOMER_ADDRESS, customer.getAddress());
         cvs.put(CUSTOMER_CREATED, customer.getCreatedDate());
 
-        long id = db.insert(CUSTOMER_TABLE, null, cvs);
-        Log.d(TAG, "Inserted new customer: " + id);
-
-        db.close();
+        writeToDB(CUSTOMER_TABLE, cvs);
     }
 
     public void addOrder(Order order) {
-        SQLiteDatabase db = getWritableDatabase();
+        Customer customer = order.getCustomer();
+
+        if(customer != null) {
+            if(findCustomer(customer.getId()) == null) {
+                addCustomer(customer);
+            }
+        }
+        else {
+            customer = new Customer(null, null, null);
+        }
 
         ContentValues cvs = new ContentValues();
+
         cvs.put(ORDER_ID, order.getOrderID());
         cvs.put(ORDER_DATE, order.getDeliveredDate());
-        cvs.put(ORDER_CUSTOMER, order.getCustomer().getId());
+        cvs.put(ORDER_CUSTOMER, customer.getId());
         cvs.put(ORDER_ISDELIVERED, order.isDelivered());
         cvs.put(ORDER_DELIVEREDDATE, order.getDeliveredDate());
         cvs.put(ORDER_DELIVEREDLONG, order.getDeliveredLong());
         cvs.put(ORDER_DELIVEREDLAT, order.getDeliveredLat());
 
-        long id = db.insert(ORDER_TABLE, null, cvs);
-        Log.d(TAG, "Inserted new order: " + id);
-
-        db.close();
+        writeToDB(ORDER_TABLE, cvs);
     }
 
     public User findUser(String name) {
-        SQLiteDatabase db = getReadableDatabase();
-
+        String table = USER_TABLE;
         String selection = USER_USERNAME + " =?";
         String[] selectionArgs = {name};
 
-        Cursor c = db.query(USER_TABLE, null, selection, selectionArgs, null, null, null);
+        Cursor c = readFromDB(table, selection, selectionArgs);
 
         User user;
 
         c.moveToFirst();
 
         if(c.getCount() > 0) {
-            user = new User(c.getString(USER_USERNAME_COL), c.getString(USER_PASSWORD_COL));
+            user = new User(c.getString(USER_USERNAME_COL),
+                            c.getString(USER_PASSWORD_COL));
         } else {
             user = null;
         }
 
-        db.close();
         c.close();
         return user;
     }
 
-    public Order[] getUndeliveredOrders() {
-        SQLiteDatabase db = getReadableDatabase();
+    public Customer findCustomer(int id) {
+        String table = CUSTOMER_TABLE;
+        String selection = CUSTOMER_ID + " =?";
+        String[] selectionArgs = {String.valueOf(id)};
 
+        Cursor c = readFromDB(table, selection, selectionArgs);
+
+        c.moveToFirst();
+        Customer customer;
+        if(c.getCount() > 0) {
+            customer = new Customer(c.getInt(CUSTOMER_ID_COL),
+                    c.getString(CUSTOMER_NAME_COL),
+                    c.getString(CUSTOMER_PHONE_COL),
+                    c.getString(CUSTOMER_ADDRESS_COL),
+                    c.getLong(CUSTOMER_CREATED_COL));
+        } else {
+            customer = null;
+        }
+
+        c.close();
+        return customer;
+    }
+
+    public Order[] getUndeliveredOrders() {
+        String table = ORDER_TABLE;
         String selection = ORDER_ISDELIVERED + " =?";
         String[] selectionArgs = {"0"};
 
-        Cursor c = db.query(ORDER_TABLE, null, selection, selectionArgs, null, null, null);
+        Cursor c = readFromDB(table, selection, selectionArgs);
 
         Order[] orders = new Order[c.getCount()];
 
-        /*if(c.moveToFirst()) {
+        if(c.moveToFirst()) {
             do {
-                orders[c.getPosition()] = new Order(c.getInt(ORDER_CUSTOMER_COL));
-            }
-        }*/
+                orders[c.getPosition()] = new Order(c.getInt(ORDER_ID_COL),
+                                                    c.getLong(ORDER_DATE_COL),
+                                                    findCustomer(c.getInt(ORDER_CUSTOMER_COL)),
+                                                    c.getInt(ORDER_ISDELIVERED_COL) == 1,
+                                                    c.getLong(ORDER_DELIVEREDDATE_COL),
+                                                    c.getLong(ORDER_DELIVEREDLONG_COL),
+                                                    c.getLong(ORDER_DELIVEREDLAT_COL));
+            } while (c.moveToNext());
+        }
 
+        c.close();
         return orders;
+    }
+
+    private void writeToDB(String table, ContentValues cvs) {
+        SQLiteDatabase writableDatabase = getWritableDatabase();
+        long id = writableDatabase.insert(table, null, cvs);
+        Log.d(TAG, "Inserted new row in " + table + ": " + id);
+        writableDatabase.close();
+    }
+
+    private Cursor readFromDB(String table, String selection, String[] selectionArgs) {
+        SQLiteDatabase readableDatabase = getReadableDatabase();
+        Cursor c = readableDatabase.query(table, null, selection, selectionArgs, null, null, null);
+        return c;
     }
 }

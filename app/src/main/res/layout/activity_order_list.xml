@@ -12,17 +12,26 @@
 
     <Button
         android:text="Add order"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
+        android:id="@+id/button_add"
         android:onClick="addNewOrder"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/button">
+        android:layout_below="@+id/button_add">
 
     </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:text="Load orders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_load"
+        android:onClick="loadOrders"
+        android:layout_alignBaseline="@+id/button_add"
+        android:layout_toEndOf="@+id/button_add" />
 
 </RelativeLayout>

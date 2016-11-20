@@ -75,7 +75,8 @@
         android:id="@+id/ll_costumer_phone"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/order_item_costumer_phone_label"
