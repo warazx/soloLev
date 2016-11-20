@@ -81,7 +81,7 @@ public class DBHelper extends SQLiteOpenHelper {
             ORDER_ISDELIVERED + " NUMERIC NOT NULL," +
             ORDER_DELIVEREDDATE + " REAL NOT NULL," +
             ORDER_DELIVEREDLONG + " REAL NOT NULL," +
-            ORDER_DELIVEREDLAT + " REAL NOT NULL," +
+            ORDER_DELIVEREDLAT + " REAL NOT NULL" +
             ");";
 
     // -----------------------------------------------------------------------------------------
@@ -99,7 +99,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 
     public boolean addUser(String username, String password) {
@@ -175,7 +174,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return user;
     }
 
-    /*public Order[] getUndeliveredOrders() {
+    public Order[] getUndeliveredOrders() {
         SQLiteDatabase db = getReadableDatabase();
 
         String selection = ORDER_ISDELIVERED + " =?";
@@ -185,13 +184,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Order[] orders = new Order[c.getCount()];
 
-        if(c.moveToFirst()) {
+        /*if(c.moveToFirst()) {
             do {
                 orders[c.getPosition()] = new Order(c.getInt(ORDER_CUSTOMER_COL));
             }
-        }
-
+        }*/
 
         return orders;
-    }*/
+    }
 }

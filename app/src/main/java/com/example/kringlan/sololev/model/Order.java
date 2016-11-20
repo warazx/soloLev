@@ -21,6 +21,14 @@ public class Order {
         idCounter++;
     }
 
+    public static int getIdCounter() {
+        return idCounter;
+    }
+
+    public static void setIdCounter(int idCounter) {
+        Order.idCounter = idCounter;
+    }
+
     public int getOrderID() {
         return orderID;
     }
