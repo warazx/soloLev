@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume() {
+    protected void onResume() {
         super.onPostResume();
         SharedPrefsHelper.loadSharedPrefs(this);
     }
