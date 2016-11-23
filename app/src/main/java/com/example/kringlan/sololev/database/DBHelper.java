@@ -6,15 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.kringlan.sololev.model.Customer;
 import com.example.kringlan.sololev.model.Order;
 import com.example.kringlan.sololev.model.User;
-import com.example.kringlan.sololev.util.GenerateCustomer;
-import com.example.kringlan.sololev.view.LoginActivity;
-
-import java.util.Random;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DB_HELPER";
@@ -249,8 +244,8 @@ public class DBHelper extends SQLiteOpenHelper {
                                                     findCustomer(c.getInt(ORDER_CUSTOMER_COL)),
                                                     c.getInt(ORDER_ISDELIVERED_COL) == 1,
                                                     c.getLong(ORDER_DELIVEREDDATE_COL),
-                                                    c.getLong(ORDER_DELIVEREDLONG_COL),
-                                                    c.getLong(ORDER_DELIVEREDLAT_COL));
+                                                    c.getDouble(ORDER_DELIVEREDLONG_COL),
+                                                    c.getDouble(ORDER_DELIVEREDLAT_COL));
 
                 numberOfOrders++;
             } while (c.moveToNext());
@@ -316,8 +311,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     findCustomer(c.getInt(ORDER_CUSTOMER_COL)),
                     c.getInt(ORDER_ISDELIVERED_COL) == 1,
                     c.getLong(ORDER_DELIVEREDDATE_COL),
-                    c.getLong(ORDER_DELIVEREDLONG_COL),
-                    c.getLong(ORDER_DELIVEREDLAT_COL));
+                    c.getDouble(ORDER_DELIVEREDLONG_COL),
+                    c.getDouble(ORDER_DELIVEREDLAT_COL));
 
             Log.d(TAG, "Order found!");
         } else {

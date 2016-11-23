@@ -1,5 +1,8 @@
 package com.example.kringlan.sololev.model;
 
+import android.location.Location;
+
+import com.example.kringlan.sololev.util.GPSTracker;
 import com.example.kringlan.sololev.util.TimeConverter;
 
 public class Order {
@@ -10,8 +13,8 @@ public class Order {
     private Customer customer;
     private boolean isDelivered;
     private long deliveredDate;
-    private long deliveredLong;
-    private long deliveredLat;
+    private double deliveredLong;
+    private double deliveredLat;
 
     public Order(Customer customer) {
         this.orderID = idCounter;
@@ -21,7 +24,7 @@ public class Order {
         idCounter++;
     }
 
-    public Order(int orderID, long orderingDate, Customer customer, boolean isDelivered, long deliveredDate, long deliveredLong, long deliveredLat) {
+    public Order(int orderID, long orderingDate, Customer customer, boolean isDelivered, long deliveredDate, double deliveredLong, double deliveredLat) {
         this.orderID = orderID;
         this.orderingDate = orderingDate;
         this.customer = customer;
@@ -71,8 +74,11 @@ public class Order {
         isDelivered = true;
         deliveredDate = System.currentTimeMillis();
         //TODO: Implement a method to get the current coordinates.
-        deliveredLat = 666;
-        deliveredLong = 666;
+        Location location = GPSTracker.getLastLocation();
+        if(location != null) {
+            deliveredLat = location.getLatitude();
+            deliveredLong = location.getLongitude();
+        }
     }
 
     public long getDeliveredDate() {
@@ -83,7 +89,7 @@ public class Order {
         this.deliveredDate = deliveredDate;
     }
 
-    public long getDeliveredLong() {
+    public double getDeliveredLong() {
         return deliveredLong;
     }
 
@@ -91,7 +97,7 @@ public class Order {
         this.deliveredLong = deliveredLong;
     }
 
-    public long getDeliveredLat() {
+    public double getDeliveredLat() {
         return deliveredLat;
     }
 
