@@ -1,5 +1,6 @@
 package com.example.kringlan.sololev.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,12 +33,12 @@ public class OrderListActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+        initOrders();
+
         recyclerView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
-        initOrders();
 
         adapter = new OrderAdapter(orders);
         recyclerView.setAdapter(adapter);
@@ -67,7 +68,8 @@ public class OrderListActivity extends AppCompatActivity {
         DBHelper db = new DBHelper(this);
         orders = db.getUndeliveredOrders();
         db.close();
-        recyclerView.invalidate();
+        RecyclerView.Adapter newAdapter = new OrderAdapter(orders);
+        recyclerView.swapAdapter(newAdapter, true);
     }
 
     private void initOrders() {

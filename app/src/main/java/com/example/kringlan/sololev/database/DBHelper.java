@@ -11,6 +11,10 @@ import android.widget.Toast;
 import com.example.kringlan.sololev.model.Customer;
 import com.example.kringlan.sololev.model.Order;
 import com.example.kringlan.sololev.model.User;
+import com.example.kringlan.sololev.util.GenerateCustomer;
+import com.example.kringlan.sololev.view.LoginActivity;
+
+import java.util.Random;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DB_HELPER";
@@ -109,6 +113,9 @@ public class DBHelper extends SQLiteOpenHelper {
             cvs.put(USER_USERNAME, username);
             cvs.put(USER_PASSWORD, password);
 
+            Log.d(TAG, "Adding new user." +
+                    "\nUsername: " + username +
+                    "\nPassword: " + password);
             writeToDB(USER_TABLE, cvs);
 
             return true;
@@ -123,6 +130,13 @@ public class DBHelper extends SQLiteOpenHelper {
         cvs.put(CUSTOMER_PHONE, customer.getPhoneNumber());
         cvs.put(CUSTOMER_ADDRESS, customer.getAddress());
         cvs.put(CUSTOMER_CREATED, customer.getCreatedDate());
+
+        Log.d(TAG, "Adding new customer." +
+                "\nID: " + customer.getId() +
+                "\nName: " + customer.getName() +
+                "\nPhone: " + customer.getPhoneNumber() +
+                "\nAddress: " + customer.getAddress() +
+                "\nCreated: " + customer.getCreatedDate());
 
         writeToDB(CUSTOMER_TABLE, cvs);
     }
@@ -149,6 +163,15 @@ public class DBHelper extends SQLiteOpenHelper {
         cvs.put(ORDER_DELIVEREDLONG, order.getDeliveredLong());
         cvs.put(ORDER_DELIVEREDLAT, order.getDeliveredLat());
 
+        Log.d(TAG, "Adding new order." +
+                "\nID: " + order.getOrderID() +
+                "\nDate: " + order.getDeliveredDate() +
+                "\nCustomer: " + customer.getId() +
+                "\nIsDelivered: " + order.isDelivered() +
+                "\nDelivered: " + order.getDeliveredDate() +
+                "\nLong: " + order.getDeliveredLong() +
+                "\nLat: " + order.getDeliveredLat());
+
         writeToDB(ORDER_TABLE, cvs);
     }
 
@@ -156,6 +179,8 @@ public class DBHelper extends SQLiteOpenHelper {
         String table = USER_TABLE;
         String selection = USER_USERNAME + " =?";
         String[] selectionArgs = {name};
+
+        Log.d(TAG, "Trying to find user: " + name);
 
         Cursor c = readFromDB(table, selection, selectionArgs);
 
@@ -166,8 +191,10 @@ public class DBHelper extends SQLiteOpenHelper {
         if(c.getCount() > 0) {
             user = new User(c.getString(USER_USERNAME_COL),
                             c.getString(USER_PASSWORD_COL));
+            Log.d(TAG, name + " found!");
         } else {
             user = null;
+            Log.d(TAG, name + " not found.");
         }
 
         c.close();
@@ -225,13 +252,14 @@ public class DBHelper extends SQLiteOpenHelper {
     private void writeToDB(String table, ContentValues cvs) {
         SQLiteDatabase writableDatabase = getWritableDatabase();
         long id = writableDatabase.insert(table, null, cvs);
-        Log.d(TAG, "Inserted new row in " + table + ": " + id);
+        Log.d(TAG, "Wrote to database: " + id);
         writableDatabase.close();
     }
 
     private Cursor readFromDB(String table, String selection, String[] selectionArgs) {
         SQLiteDatabase readableDatabase = getReadableDatabase();
         Cursor c = readableDatabase.query(table, null, selection, selectionArgs, null, null, null);
+        Log.d(TAG, "Read " + c.getCount() + " rows from the database.");
         return c;
     }
 }

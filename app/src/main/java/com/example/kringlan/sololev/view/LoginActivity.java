@@ -3,14 +3,15 @@ package com.example.kringlan.sololev.view;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.kringlan.sololev.R;
 import com.example.kringlan.sololev.database.DBHelper;
+import com.example.kringlan.sololev.model.Order;
 import com.example.kringlan.sololev.model.User;
-import com.example.kringlan.sololev.util.GenerateCustomer;
 import com.example.kringlan.sololev.util.SharedPrefsHelper;
 
 public class LoginActivity extends AppCompatActivity {

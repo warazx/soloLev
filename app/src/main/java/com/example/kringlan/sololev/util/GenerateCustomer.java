@@ -10,10 +10,10 @@ import java.util.Random;
 public final class GenerateCustomer {
     private static Random rand = new Random();
 
-    private static String[] names = {"Stephan", "Larhonda", "Karlene", "Johanna", "Bernarda",
+    public static String[] names = {"Stephan", "Larhonda", "Karlene", "Johanna", "Bernarda",
             "Nikia", "Jasper", "Minh", "Tifany", "Reyes"};
 
-    private static String[] addresses = {"Tegnérsgatan 14B", "Volrat Thamsgatan 4",
+    public static String[] addresses = {"Tegnérsgatan 14B", "Volrat Thamsgatan 4",
             "Södra Viktoriagatan 42", "Odinsgatan 9", "Smörbollsgatan 6B", "Skillnadsgatan 19",
             "Lagmansgatan 8B", "Tenorgatan 2", "J A Pripps gata 2", "Kungsladugårdsgatan 21"};
 
