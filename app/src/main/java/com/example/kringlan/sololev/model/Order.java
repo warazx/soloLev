@@ -3,7 +3,7 @@ package com.example.kringlan.sololev.model;
 import com.example.kringlan.sololev.util.TimeConverter;
 
 public class Order {
-    private static int idCounter = 1;
+    private static int idCounter = 0;
 
     private int orderID;
     private long orderingDate;
@@ -67,8 +67,12 @@ public class Order {
         return isDelivered;
     }
 
-    public void setDelivered(boolean delivered) {
-        isDelivered = delivered;
+    public void deliver() {
+        isDelivered = true;
+        deliveredDate = System.currentTimeMillis();
+        //TODO: Implement a method to get the current coordinates.
+        deliveredLat = 666;
+        deliveredLong = 666;
     }
 
     public long getDeliveredDate() {

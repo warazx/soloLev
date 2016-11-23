@@ -1,7 +1,7 @@
 package com.example.kringlan.sololev.model;
 
 public class Customer {
-    private static int idCounter = 1;
+    private static int idCounter = 0;
 
     private int id;
     private String name;

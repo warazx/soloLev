@@ -206,6 +206,8 @@ public class DBHelper extends SQLiteOpenHelper {
         String selection = CUSTOMER_ID + " =?";
         String[] selectionArgs = {String.valueOf(id)};
 
+        Log.d(TAG, "Trying to find customer: " + id);
+
         Cursor c = readFromDB(table, selection, selectionArgs);
 
         c.moveToFirst();
@@ -216,8 +218,11 @@ public class DBHelper extends SQLiteOpenHelper {
                     c.getString(CUSTOMER_PHONE_COL),
                     c.getString(CUSTOMER_ADDRESS_COL),
                     c.getLong(CUSTOMER_CREATED_COL));
+
+            Log.d(TAG, "Customer found!: " + id);
         } else {
             customer = null;
+            Log.d(TAG, "Customer not found: " + id);
         }
 
         c.close();
@@ -229,9 +234,13 @@ public class DBHelper extends SQLiteOpenHelper {
         String selection = ORDER_ISDELIVERED + " =?";
         String[] selectionArgs = {"0"};
 
+        Log.d(TAG, "Getting all undelivered orders from database.");
+
         Cursor c = readFromDB(table, selection, selectionArgs);
 
         Order[] orders = new Order[c.getCount()];
+
+        int numberOfOrders = 0;
 
         if(c.moveToFirst()) {
             do {
@@ -242,11 +251,98 @@ public class DBHelper extends SQLiteOpenHelper {
                                                     c.getLong(ORDER_DELIVEREDDATE_COL),
                                                     c.getLong(ORDER_DELIVEREDLONG_COL),
                                                     c.getLong(ORDER_DELIVEREDLAT_COL));
+
+                numberOfOrders++;
             } while (c.moveToNext());
         }
 
+        Log.d(TAG, "Found " + numberOfOrders + " orders.");
+
+
         c.close();
         return orders;
+    }
+
+    public Order[] getDeliveredOrders() {
+        String table = ORDER_TABLE;
+        String selection = ORDER_ISDELIVERED + " =?";
+        String[] selectionArgs = {"1"};
+
+        Log.d(TAG, "Getting all delivered orders from database.");
+
+        Cursor c = readFromDB(table, selection, selectionArgs);
+
+        Order[] orders = new Order[c.getCount()];
+
+        int numberOfOrders = 0;
+
+        if(c.moveToFirst()) {
+            do {
+                orders[c.getPosition()] = new Order(c.getInt(ORDER_ID_COL),
+                        c.getLong(ORDER_DATE_COL),
+                        findCustomer(c.getInt(ORDER_CUSTOMER_COL)),
+                        c.getInt(ORDER_ISDELIVERED_COL) == 1,
+                        c.getLong(ORDER_DELIVEREDDATE_COL),
+                        c.getLong(ORDER_DELIVEREDLONG_COL),
+                        c.getLong(ORDER_DELIVEREDLAT_COL));
+
+                numberOfOrders++;
+            } while (c.moveToNext());
+        }
+
+        Log.d(TAG, "Found " + numberOfOrders + " orders.");
+
+
+        c.close();
+        return orders;
+    }
+
+    public Order findOrder(String id) {
+        String table = ORDER_TABLE;
+        String selection = ORDER_ID + " =?";
+        String[] selectionArgs = {id};
+
+        Log.d(TAG, "Finding order with id: " + id);
+
+        Cursor c = readFromDB(table, selection, selectionArgs);
+
+        Order order;
+
+        c.moveToFirst();
+
+        if(c.getCount() == 1) {
+            order = new Order(c.getInt(ORDER_ID_COL),
+                    c.getLong(ORDER_DATE_COL),
+                    findCustomer(c.getInt(ORDER_CUSTOMER_COL)),
+                    c.getInt(ORDER_ISDELIVERED_COL) == 1,
+                    c.getLong(ORDER_DELIVEREDDATE_COL),
+                    c.getLong(ORDER_DELIVEREDLONG_COL),
+                    c.getLong(ORDER_DELIVEREDLAT_COL));
+
+            Log.d(TAG, "Order found!");
+        } else {
+            order = null;
+            Log.d(TAG, "Order not found.");
+        }
+
+        c.close();
+        return order;
+    }
+
+    public void setOrderToDelivered(Order order) {
+        String table = ORDER_TABLE;
+        String selection = ORDER_ID + " =?";
+        String[] selectionArgs = {String.valueOf(order.getOrderID())};
+        ContentValues cvs = new ContentValues();
+
+        cvs.put(ORDER_ISDELIVERED, order.isDelivered());
+        cvs.put(ORDER_DELIVEREDDATE, order.getDeliveredDate());
+        cvs.put(ORDER_DELIVEREDLAT, order.getDeliveredLat());
+        cvs.put(ORDER_DELIVEREDLONG, order.getDeliveredLong());
+
+        Log.d(TAG, "Setting order to delivered: " + order.getOrderID());
+
+        updateDB(table, cvs, selection, selectionArgs);
     }
 
     private void writeToDB(String table, ContentValues cvs) {
@@ -260,6 +356,14 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase readableDatabase = getReadableDatabase();
         Cursor c = readableDatabase.query(table, null, selection, selectionArgs, null, null, null);
         Log.d(TAG, "Read " + c.getCount() + " rows from the database.");
+        readableDatabase.close();
         return c;
+    }
+
+    private void updateDB(String table, ContentValues cvs, String selection, String[] selectionArgs) {
+        SQLiteDatabase writableDatabase = getWritableDatabase();
+        long id = writableDatabase.update(table, cvs, selection, selectionArgs);
+        Log.d(TAG, "Updated database: " + id);
+        writableDatabase.close();
     }
 }

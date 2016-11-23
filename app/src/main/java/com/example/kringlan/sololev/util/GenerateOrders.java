@@ -13,6 +13,9 @@ public final class GenerateOrders {
     public static void add(int amount, Activity activity) {
         DBHelper dbHelper = new DBHelper(activity);
 
+        int numOrders = dbHelper.getDeliveredOrders().length + dbHelper.getUndeliveredOrders().length;
+        Order.setIdCounter(numOrders);
+
         Order order;
         for(int i = 0; i < amount; i++) {
             order = new Order(dbHelper.findCustomer(rand.nextInt(10)));

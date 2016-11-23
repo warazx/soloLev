@@ -13,4 +13,6 @@
     <string name="toast_add_user_success_message">Användare tillagd!</string>
     <string name="order_counter_status">ORDER_COUNTER_STATUS</string>
     <string name="customer_counter_status">CUSTOMER_COUNTER_STATUS</string>
+    <string name="order_activity_deliver_btn_text">Leverera order</string>
+    <string name="order_activity_delivered_date_label">Levererad datum:</string>
 </resources>

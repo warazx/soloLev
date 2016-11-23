@@ -10,4 +10,143 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.kringlan.sololev.view.OrderActivity">
 
+    <LinearLayout
+        android:id="@+id/ll_order_id"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/order_activity_id_label"
+            android:text="@string/order_item_order_id_label"
+            android:textSize="24sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
+
+        <TextView
+            android:id="@+id/order_activity_order_id_value"
+            tools:text="253"
+            android:textSize="24sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_costumer_address"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_order_id">
+
+        <TextView
+            android:id="@+id/order_activity_costumer_address_label"
+            android:text="@string/order_item_costumer_address_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
+
+        <TextView
+            android:id="@+id/order_activity_costumer_address_value"
+            tools:text="Storgatan 10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_costumer_name"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_costumer_address">
+
+        <TextView
+            android:id="@+id/order_activity_costumer_name_label"
+            android:text="@string/order_item_costumer_name_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
+
+        <TextView
+            android:id="@+id/order_activity_costumer_name_value"
+            tools:text="Anders Svensson"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_costumer_phone"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_costumer_name">
+
+        <TextView
+            android:id="@+id/order_activity_costumer_phone_label"
+            android:text="@string/order_item_costumer_phone_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
+
+        <TextView
+            android:id="@+id/order_activity_costumer_phone_value"
+            tools:text="070-12312312"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_not_delivered"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_costumer_phone">
+
+        <Button
+            android:text="@string/order_activity_deliver_btn_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_costumer_phone"
+            android:layout_alignParentStart="true"
+            android:id="@+id/order_activity_deliver_btn"
+            android:onClick="deliverOrder"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_delivered"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_costumer_phone">
+
+        <LinearLayout
+            android:id="@+id/ll_delivered_date"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_costumer_name">
+
+            <TextView
+                android:id="@+id/order_activity_delivered_date_label"
+                android:text="@string/order_activity_delivered_date_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+
+            <TextView
+                android:id="@+id/order_activity_delivered_date_value"
+                tools:text="2016-11-03 13:42"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>

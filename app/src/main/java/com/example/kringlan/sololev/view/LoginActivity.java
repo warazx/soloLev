@@ -12,6 +12,7 @@ import com.example.kringlan.sololev.R;
 import com.example.kringlan.sololev.database.DBHelper;
 import com.example.kringlan.sololev.model.Order;
 import com.example.kringlan.sololev.model.User;
+import com.example.kringlan.sololev.util.GenerateCustomer;
 import com.example.kringlan.sololev.util.SharedPrefsHelper;
 
 public class LoginActivity extends AppCompatActivity {
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
 
         usernameEditText = (EditText) findViewById(R.id.activity_login_username_edittext);
         passwordEditText = (EditText) findViewById(R.id.activity_login_password_edittext);
+
+        GenerateCustomer.add(10, this);
     }
 
     public void logIntoApp(View view) {

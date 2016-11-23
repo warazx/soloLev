@@ -20,6 +20,8 @@ public final class GenerateCustomer {
     public static void add(int amount, Activity activity) {
         DBHelper db = new DBHelper(activity);
 
+
+
         String name;
         String address;
         String phone;

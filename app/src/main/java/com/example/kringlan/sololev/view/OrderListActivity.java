@@ -1,9 +1,5 @@
 package com.example.kringlan.sololev.view;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +9,6 @@ import android.view.View;
 import com.example.kringlan.sololev.R;
 import com.example.kringlan.sololev.adapter.OrderAdapter;
 import com.example.kringlan.sololev.database.DBHelper;
-import com.example.kringlan.sololev.model.Customer;
 import com.example.kringlan.sololev.model.Order;
 import com.example.kringlan.sololev.util.GenerateOrders;
 import com.example.kringlan.sololev.util.SharedPrefsHelper;
@@ -58,13 +53,14 @@ public class OrderListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onPostResume();
         SharedPrefsHelper.loadSharedPrefs(this);
+        loadUndeliveredOrders();
     }
 
-    public void loadOrders(View view) {
-        loadOrders();
+    public void loadUndeliveredOrders(View view) {
+        loadUndeliveredOrders();
     }
 
-    public void loadOrders() {
+    public void loadUndeliveredOrders() {
         DBHelper db = new DBHelper(this);
         orders = db.getUndeliveredOrders();
         db.close();
@@ -76,5 +72,14 @@ public class OrderListActivity extends AppCompatActivity {
         DBHelper db = new DBHelper(this);
         orders = db.getUndeliveredOrders();
         db.close();
+    }
+
+
+    public void loadDeliveredOrders(View view) {
+        DBHelper db = new DBHelper(this);
+        orders = db.getDeliveredOrders();
+        db.close();
+        RecyclerView.Adapter newAdapter = new OrderAdapter(orders);
+        recyclerView.swapAdapter(newAdapter, true);
     }
 }
