@@ -63,6 +63,7 @@ public class OrderListActivity extends AppCompatActivity implements
 
     public void addNewOrder(View view) {
         GenerateOrders.add(10, this);
+        loadUndeliveredOrders();
     }
 
     @Override
