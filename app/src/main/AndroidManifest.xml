@@ -38,6 +38,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.kringlan.sololev.view.OrderActivity" />
         </activity>
+        <activity android:name=".view.SettingsActivity"></activity>
     </application>
 
 </manifest>

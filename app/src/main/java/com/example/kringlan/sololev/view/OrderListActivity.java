@@ -1,6 +1,9 @@
 package com.example.kringlan.sololev.view;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -10,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -33,6 +38,8 @@ public class OrderListActivity extends AppCompatActivity implements
 
     private GoogleApiClient googleApiClient;
 
+    private SharedPreferences sharedPref;
+
     private Order[] orders;
 
     @Override
@@ -41,6 +48,8 @@ public class OrderListActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_order_list);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        sharedPref = this.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE);
 
         initOrders();
 
@@ -62,7 +71,8 @@ public class OrderListActivity extends AppCompatActivity implements
     }
 
     public void addNewOrder(View view) {
-        GenerateOrders.add(10, this);
+        int amount = sharedPref.getInt(getString(R.string.settings_new_orders_amount_status), SettingsActivity.START_VALUE);
+        GenerateOrders.add(amount, this);
         loadUndeliveredOrders();
     }
 
@@ -77,6 +87,28 @@ public class OrderListActivity extends AppCompatActivity implements
         super.onPostResume();
         SharedPrefsHelper.loadSharedPrefs(this);
         loadUndeliveredOrders();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionbar_settings:
+                goToSettings();
+                return true;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void goToSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     public void loadUndeliveredOrders(View view) {

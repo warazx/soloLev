@@ -16,4 +16,8 @@
     <string name="order_activity_deliver_btn_text">Leverera order</string>
     <string name="order_activity_delivered_date_label">Levererad datum:</string>
     <string name="title_activity_maps">Map</string>
+    <string name="actionbar_settings_label">Inställningar</string>
+    <string name="actionbar_toggle_label">Change displayed orders</string>
+    <string name="settings_activity_new_orders_amount_label">Ordrar per uppdatering:</string>
+    <string name="settings_new_orders_amount_status">SETTINGS_NEW_ORDERS_AMOUNT</string>
 </resources>
