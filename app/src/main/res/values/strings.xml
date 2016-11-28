@@ -20,4 +20,8 @@
     <string name="actionbar_toggle_label">Change displayed orders</string>
     <string name="settings_activity_new_orders_amount_label">Ordrar per uppdatering:</string>
     <string name="settings_new_orders_amount_status">SETTINGS_NEW_ORDERS_AMOUNT</string>
+    <string name="settings_activity_phonenumber_label">Leveransbekräftelse:</string>
+    <string name="settings_phonenumber_status">SETTINGS_PHONENUMBER</string>
+    <string name="order_activity_sms_message">Order %d har blivit levererad.</string>
+    <string name="actionbar_add_label">Lägg till ordrar</string>
 </resources>

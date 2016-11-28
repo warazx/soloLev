@@ -1,6 +1,7 @@
 package com.example.kringlan.sololev.view;
 
 import android.Manifest;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +37,11 @@ public class OrderListActivity extends AppCompatActivity implements
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private boolean isShowingDeliveredOrders;
+
+    private MenuItem deliveredOrdersOption;
+    private MenuItem undeliveredOrdersOption;
+
     private GoogleApiClient googleApiClient;
 
     private SharedPreferences sharedPref;
@@ -50,6 +56,8 @@ public class OrderListActivity extends AppCompatActivity implements
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         sharedPref = this.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE);
+
+        isShowingDeliveredOrders = false;
 
         initOrders();
 
@@ -70,12 +78,6 @@ public class OrderListActivity extends AppCompatActivity implements
         }
     }
 
-    public void addNewOrder(View view) {
-        int amount = sharedPref.getInt(getString(R.string.settings_new_orders_amount_status), SettingsActivity.START_VALUE);
-        GenerateOrders.add(amount, this);
-        loadUndeliveredOrders();
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -92,12 +94,25 @@ public class OrderListActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        deliveredOrdersOption = menu.findItem(R.id.actionbar_delivered_orders);
+        undeliveredOrdersOption = menu.findItem(R.id.actionbar_undelivered_orders);
+        deliveredOrdersOption.setVisible(true);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.actionbar_add_orders:
+                addNewOrder();
+                return true;
+            case R.id.actionbar_delivered_orders:
+                toggleOrders();
+                return true;
+            case R.id.actionbar_undelivered_orders:
+                toggleOrders();
+                return true;
             case R.id.actionbar_settings:
                 goToSettings();
                 return true;
@@ -106,13 +121,27 @@ public class OrderListActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    public void addNewOrder() {
+        int amount = sharedPref.getInt(getString(R.string.settings_new_orders_amount_status), SettingsActivity.START_VALUE);
+        GenerateOrders.add(amount, this);
+        isShowingDeliveredOrders = false;
+        loadUndeliveredOrders();
+    }
+
+    private void toggleOrders() {
+        if(isShowingDeliveredOrders) {
+            loadUndeliveredOrders();
+            isShowingDeliveredOrders = false;
+        } else {
+            loadDeliveredOrders();
+            isShowingDeliveredOrders = true;
+        }
+        toggleMenuItems();
+    }
+
     private void goToSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-    }
-
-    public void loadUndeliveredOrders(View view) {
-        loadUndeliveredOrders();
     }
 
     public void loadUndeliveredOrders() {
@@ -121,6 +150,19 @@ public class OrderListActivity extends AppCompatActivity implements
         db.close();
         RecyclerView.Adapter newAdapter = new OrderAdapter(orders);
         recyclerView.swapAdapter(newAdapter, true);
+        toggleMenuItems();
+    }
+
+    private void toggleMenuItems() {
+        if(deliveredOrdersOption != null && undeliveredOrdersOption != null) {
+            if(isShowingDeliveredOrders) {
+                deliveredOrdersOption.setVisible(false);
+                undeliveredOrdersOption.setVisible(true);
+            } else {
+                deliveredOrdersOption.setVisible(true);
+                undeliveredOrdersOption.setVisible(false);
+            }
+        }
     }
 
     private void initOrders() {
@@ -130,12 +172,13 @@ public class OrderListActivity extends AppCompatActivity implements
     }
 
 
-    public void loadDeliveredOrders(View view) {
+    public void loadDeliveredOrders() {
         DBHelper db = new DBHelper(this);
         orders = db.getDeliveredOrders();
         db.close();
         RecyclerView.Adapter newAdapter = new OrderAdapter(orders);
         recyclerView.swapAdapter(newAdapter, true);
+        toggleMenuItems();
     }
 
     @Override

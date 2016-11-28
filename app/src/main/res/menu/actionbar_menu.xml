@@ -2,14 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/actionbar_toggleOrders"
-        android:title="@string/actionbar_toggle_label"
+    <item android:id="@+id/actionbar_add_orders"
+        android:title="@string/actionbar_add_label"
         android:orderInCategory="10"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_action_add_orders"
+        app:showAsAction="always"
+        android:visible="false"/>
+
+    <item android:id="@+id/actionbar_delivered_orders"
+        android:title="@string/actionbar_toggle_label"
+        android:orderInCategory="50"
+        android:icon="@drawable/ic_action_empty_box"
+        app:showAsAction="always"
+        android:visible="false"/>
+
+    <item android:id="@+id/actionbar_undelivered_orders"
+        android:title="@string/actionbar_toggle_label"
+        android:orderInCategory="50"
+        android:icon="@drawable/ic_action_checked_box"
+
+        app:showAsAction="always"
+        android:visible="false"/>
 
     <item android:id="@+id/actionbar_settings"
         android:title="@string/actionbar_settings_label"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false"/>
 
 </menu>

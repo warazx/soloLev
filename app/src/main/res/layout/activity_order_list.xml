@@ -10,44 +10,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.kringlan.sololev.view.OrderListActivity">
 
-    <LinearLayout
-        android:id="@+id/ll_btns"
-        android:layout_alignParentStart="true"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:text="Add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_add"
-            android:onClick="addNewOrder"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="ToDo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_load"
-            android:onClick="loadUndeliveredOrders"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="Done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_load2"
-            android:onClick="loadDeliveredOrders"
-            android:layout_weight="1" />
-
-
-    </LinearLayout>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/ll_btns"/>
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

@@ -3,7 +3,7 @@ package com.example.kringlan.sololev.model;
 import android.location.Location;
 
 import com.example.kringlan.sololev.util.GPSTracker;
-import com.example.kringlan.sololev.util.TimeConverter;
+import com.example.kringlan.sololev.util.DataConverter;
 
 public class Order {
     private static int idCounter = 0;
@@ -51,7 +51,7 @@ public class Order {
     }
 
     public String getOrderingDate() {
-        return TimeConverter.toString(orderingDate);
+        return DataConverter.longToDateString(orderingDate);
     }
 
     public void setOrderingDate(long orderingDate) {
