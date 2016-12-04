@@ -1,7 +1,6 @@
 package com.example.kringlan.sololev.view;
 
 import android.Manifest;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,10 +31,19 @@ import com.example.kringlan.sololev.util.DataConverter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class OrderActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class OrderActivity
+        extends AppCompatActivity
+        implements  GoogleApiClient.ConnectionCallbacks,
+                    GoogleApiClient.OnConnectionFailedListener,
+        OnMapReadyCallback {
 
     public static final String LATITUDE_KEY = "latitude";
     public static final String LONGITUDE_KEY = "longitude";
@@ -52,6 +60,9 @@ public class OrderActivity extends AppCompatActivity implements
     private GoogleApiClient googleApiClient;
     private SmsManager smsManager = SmsManager.getDefault();
     private Order order;
+    private GoogleMap googleMap;
+    private MapFragment mapFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +92,9 @@ public class OrderActivity extends AppCompatActivity implements
         llNotDelivered = (LinearLayout) findViewById(R.id.ll_not_delivered);
         deliveredDate = (TextView) findViewById(R.id.order_activity_delivered_date_value);
         sharedPref = this.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE);
+        mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     private void initSetValues(Customer customer) {
@@ -103,6 +117,7 @@ public class OrderActivity extends AppCompatActivity implements
 
     private void toggleView() {
         if(order.isDelivered()) {
+            mapFragment.getMapAsync(this);
             llNotDelivered.setVisibility(View.GONE);
             llDelivered.setVisibility(View.VISIBLE);
         } else {
@@ -194,5 +209,14 @@ public class OrderActivity extends AppCompatActivity implements
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+
+        LatLng deliveredPos = new LatLng(order.getDeliveredLat(), order.getDeliveredLong());
+        googleMap.addMarker(new MarkerOptions().position(deliveredPos).title(order.getCustomer().getName()));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(deliveredPos, 16));
     }
 }
