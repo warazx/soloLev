@@ -45,19 +45,12 @@ public class OrderActivity extends AppCompatActivity implements
     private TextView nameText;
     private TextView phoneText;
     private TextView deliveredDate;
-    private MapView mapView;
-
     private SharedPreferences sharedPref;
-
     private LinearLayout llDelivered;
     private LinearLayout llNotDelivered;
-
     private MenuItem goToSettingsOption;
-
     private GoogleApiClient googleApiClient;
-
     private SmsManager smsManager = SmsManager.getDefault();
-
     private Order order;
 
     @Override
@@ -65,16 +58,7 @@ public class OrderActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        orderIdText = (TextView) findViewById(R.id.order_activity_order_id_value);
-        addressText = (TextView) findViewById(R.id.order_activity_costumer_address_value);
-        nameText = (TextView) findViewById(R.id.order_activity_costumer_name_value);
-        phoneText = (TextView) findViewById(R.id.order_activity_costumer_phone_value);
-        llDelivered = (LinearLayout) findViewById(R.id.ll_delivered);
-        llNotDelivered = (LinearLayout) findViewById(R.id.ll_not_delivered);
-        deliveredDate = (TextView) findViewById(R.id.order_activity_delivered_date_value);
-        mapView = (MapView) findViewById(R.id.activity_order_map_view);
-
-        sharedPref = this.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE);
+        initVariableMapping();
 
         Intent intent = getIntent();
         String id = intent.getStringExtra(OrderAdapter.ORDER_ID);
@@ -84,13 +68,30 @@ public class OrderActivity extends AppCompatActivity implements
         Customer customer = order.getCustomer();
 
         toggleView();
+        initSetValues(customer);
+        initGoogleApiClient();
+    }
 
+    private void initVariableMapping() {
+        orderIdText = (TextView) findViewById(R.id.order_activity_order_id_value);
+        addressText = (TextView) findViewById(R.id.order_activity_costumer_address_value);
+        nameText = (TextView) findViewById(R.id.order_activity_costumer_name_value);
+        phoneText = (TextView) findViewById(R.id.order_activity_costumer_phone_value);
+        llDelivered = (LinearLayout) findViewById(R.id.ll_delivered);
+        llNotDelivered = (LinearLayout) findViewById(R.id.ll_not_delivered);
+        deliveredDate = (TextView) findViewById(R.id.order_activity_delivered_date_value);
+        sharedPref = this.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE);
+    }
+
+    private void initSetValues(Customer customer) {
         orderIdText.setText(order.getOrderID() + "");
         addressText.setText(customer.getAddress());
         nameText.setText(customer.getName());
         phoneText.setText(customer.getPhoneNumber());
         deliveredDate.setText(DataConverter.longToDateString(order.getDeliveredDate()));
+    }
 
+    private void initGoogleApiClient() {
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
