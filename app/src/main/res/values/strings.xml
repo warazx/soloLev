@@ -25,4 +25,5 @@
     <string name="order_activity_sms_message">Order %d har blivit levererad.</string>
     <string name="actionbar_add_label">Lägg till ordrar</string>
     <string name="order_activity_goto_map_btn_label">See on Maps</string>
+    <string name="actionbar_find_order_title">Hitta order</string>
 </resources>

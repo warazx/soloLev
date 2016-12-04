@@ -13,7 +13,7 @@ import com.example.kringlan.sololev.model.User;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DB_HELPER";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     // -----------------------------------------------------------------------------------------
 

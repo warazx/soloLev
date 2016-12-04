@@ -41,6 +41,7 @@ public class OrderListActivity extends AppCompatActivity implements
     private MenuItem deliveredOrdersOption;
     private MenuItem undeliveredOrdersOption;
     private MenuItem goToSettingsOption;
+    private MenuItem goToFindOrderOption;
 
     private GoogleApiClient googleApiClient;
 
@@ -98,10 +99,12 @@ public class OrderListActivity extends AppCompatActivity implements
         undeliveredOrdersOption = menu.findItem(R.id.actionbar_undelivered_orders);
         deliveredOrdersOption = menu.findItem(R.id.actionbar_delivered_orders);
         goToSettingsOption = menu.findItem(R.id.actionbar_settings);
+        goToFindOrderOption = menu.findItem(R.id.actionbar_find_order);
 
         deliveredOrdersOption.setVisible(true);
         addDeliveriesOption.setVisible(true);
         goToSettingsOption.setVisible(true);
+        goToFindOrderOption.setVisible(true);
 
         return true;
     }
@@ -121,9 +124,17 @@ public class OrderListActivity extends AppCompatActivity implements
             case R.id.actionbar_settings:
                 goToSettings();
                 return true;
+            case R.id.actionbar_find_order:
+                goToFindOrder();
+                return true;
             default:
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void goToFindOrder() {
+        Intent intent = new Intent(this, FindOrderActivity.class);
+        startActivity(intent);
     }
 
     public void addNewOrder() {

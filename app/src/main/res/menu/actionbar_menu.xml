@@ -24,6 +24,12 @@
         app:showAsAction="always"
         android:visible="false"/>
 
+    <item android:id="@+id/actionbar_find_order"
+        android:title="@string/actionbar_find_order_title"
+        android:orderInCategory="90"
+        app:showAsAction="never"
+        android:visible="false"/>
+
     <item android:id="@+id/actionbar_settings"
         android:title="@string/actionbar_settings_label"
         android:orderInCategory="100"
