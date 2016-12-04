@@ -45,8 +45,7 @@ public class OrderActivity
                     GoogleApiClient.OnConnectionFailedListener,
         OnMapReadyCallback {
 
-    public static final String LATITUDE_KEY = "latitude";
-    public static final String LONGITUDE_KEY = "longitude";
+    private static final int SEND_SMS_PERMISSION = 1;
 
     private TextView orderIdText;
     private TextView addressText;
@@ -137,14 +136,52 @@ public class OrderActivity
 
     private void sendSMS() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Need permission to use service", Toast.LENGTH_SHORT).show();ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.SEND_SMS}, 1);
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION);
+            }
+        } else {
+            sendSmsConfirmation();
         }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case SEND_SMS_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    sendSmsConfirmation();
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    Toast.makeText(this, "Need permission to use service", Toast.LENGTH_SHORT).show();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    private void sendSmsConfirmation() {
         String phoneNumber = sharedPref.getString(getString(R.string.settings_phonenumber_status), "");
         String message = String.format(getString(R.string.order_activity_sms_message), order.getOrderID());
 
-        smsManager.sendTextMessage(phoneNumber, "", message, null, null);
+        try {
+            smsManager.sendTextMessage(phoneNumber, "", message, null, null);
+        } catch (IllegalArgumentException iae) {
+            iae.printStackTrace();
+            Toast.makeText(this, "Invalid phone number, please change in settings.", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "SMS could not be sent", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -199,16 +236,6 @@ public class OrderActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
-
-    public void goToMap(View view) {
-        String latitude = String.valueOf(order.getDeliveredLat());
-        String longitude = String.valueOf(order.getDeliveredLong());
-
-        Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
     }
 
     @Override
