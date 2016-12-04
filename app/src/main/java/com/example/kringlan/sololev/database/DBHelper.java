@@ -13,6 +13,7 @@ import com.example.kringlan.sololev.model.User;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DB_HELPER";
+    private static final int DB_VERSION = 2;
 
     // -----------------------------------------------------------------------------------------
 
@@ -84,10 +85,11 @@ public class DBHelper extends SQLiteOpenHelper {
             ORDER_DELIVEREDLAT + " REAL" +
             ");";
 
+
     // -----------------------------------------------------------------------------------------
 
     public DBHelper(Context context) {
-        super(context, "LevAppDB", null, 1);
+        super(context, "LevAppDB", null, DB_VERSION);
     }
 
     @Override
@@ -99,6 +101,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS" + " " + ORDER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS" + " " + CUSTOMER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS" + " " + USER_TABLE);
+        Log.d(TAG,"Database version upgrade. Removing old content.");
+        onCreate(db);
     }
 
     public boolean addUser(String username, String password) {

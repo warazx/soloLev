@@ -24,4 +24,5 @@
     <string name="settings_phonenumber_status">SETTINGS_PHONENUMBER</string>
     <string name="order_activity_sms_message">Order %d har blivit levererad.</string>
     <string name="actionbar_add_label">Lägg till ordrar</string>
+    <string name="order_activity_goto_map_btn_label">See on Maps</string>
 </resources>

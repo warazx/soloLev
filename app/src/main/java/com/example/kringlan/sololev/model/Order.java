@@ -73,7 +73,6 @@ public class Order {
     public void deliver() {
         isDelivered = true;
         deliveredDate = System.currentTimeMillis();
-        //TODO: Implement a method to get the current coordinates.
         Location location = GPSTracker.getLastLocation();
         if(location != null) {
             deliveredLat = location.getLatitude();

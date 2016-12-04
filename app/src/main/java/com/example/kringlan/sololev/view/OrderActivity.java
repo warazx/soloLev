@@ -1,11 +1,13 @@
 package com.example.kringlan.sololev.view;
 
 import android.Manifest;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -13,8 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,20 +32,27 @@ import com.example.kringlan.sololev.util.DataConverter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.MapView;
 
 public class OrderActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    public static final String LATITUDE_KEY = "latitude";
+    public static final String LONGITUDE_KEY = "longitude";
 
     private TextView orderIdText;
     private TextView addressText;
     private TextView nameText;
     private TextView phoneText;
-    private Button deliverBtn;
     private TextView deliveredDate;
+    private MapView mapView;
+
     private SharedPreferences sharedPref;
 
     private LinearLayout llDelivered;
     private LinearLayout llNotDelivered;
+
+    private MenuItem goToSettingsOption;
 
     private GoogleApiClient googleApiClient;
 
@@ -63,7 +72,7 @@ public class OrderActivity extends AppCompatActivity implements
         llDelivered = (LinearLayout) findViewById(R.id.ll_delivered);
         llNotDelivered = (LinearLayout) findViewById(R.id.ll_not_delivered);
         deliveredDate = (TextView) findViewById(R.id.order_activity_delivered_date_value);
-        deliverBtn = (Button) findViewById(R.id.order_activity_deliver_btn);
+        mapView = (MapView) findViewById(R.id.activity_order_map_view);
 
         sharedPref = this.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE);
 
@@ -123,6 +132,16 @@ public class OrderActivity extends AppCompatActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        goToSettingsOption = menu.findItem(R.id.actionbar_settings);
+
+        goToSettingsOption.setVisible(true);
+
+        return true;
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         SharedPrefsHelper.saveSharedPrefs(this);
@@ -164,5 +183,15 @@ public class OrderActivity extends AppCompatActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    public void goToMap(View view) {
+        String latitude = String.valueOf(order.getDeliveredLat());
+        String longitude = String.valueOf(order.getDeliveredLong());
+
+        Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
     }
 }

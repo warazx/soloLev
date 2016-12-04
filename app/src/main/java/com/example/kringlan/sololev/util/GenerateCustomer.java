@@ -30,7 +30,7 @@ public final class GenerateCustomer {
             name = names[rand.nextInt(names.length)];
             address = addresses[rand.nextInt(addresses.length)];
             phone = "070-" + rand.nextInt(10) + rand.nextInt(10) + rand.nextInt(10) + rand.nextInt(10) + rand.nextInt(10) + rand.nextInt(10) + rand.nextInt(10);
-            Customer customer = new Customer(name, address, phone);
+            Customer customer = new Customer(name, phone, address);
             db.addCustomer(customer);
         }
         db.close();

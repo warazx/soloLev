@@ -1,7 +1,6 @@
 package com.example.kringlan.sololev.view;
 
 import android.Manifest;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.kringlan.sololev.R;
@@ -39,8 +37,10 @@ public class OrderListActivity extends AppCompatActivity implements
 
     private boolean isShowingDeliveredOrders;
 
+    private MenuItem addDeliveriesOption;
     private MenuItem deliveredOrdersOption;
     private MenuItem undeliveredOrdersOption;
+    private MenuItem goToSettingsOption;
 
     private GoogleApiClient googleApiClient;
 
@@ -94,9 +94,14 @@ public class OrderListActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_menu, menu);
-        deliveredOrdersOption = menu.findItem(R.id.actionbar_delivered_orders);
+        addDeliveriesOption = menu.findItem(R.id.actionbar_add_orders);
         undeliveredOrdersOption = menu.findItem(R.id.actionbar_undelivered_orders);
+        deliveredOrdersOption = menu.findItem(R.id.actionbar_delivered_orders);
+        goToSettingsOption = menu.findItem(R.id.actionbar_settings);
+
         deliveredOrdersOption.setVisible(true);
+        addDeliveriesOption.setVisible(true);
+        goToSettingsOption.setVisible(true);
 
         return true;
     }
